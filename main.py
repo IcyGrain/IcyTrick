@@ -39,7 +39,7 @@ def get_scales(y, sr, plot_tag):
 def get_tempo(y, sr, hop_length):
     bpm = tempo.calculate_tempo(y, sr, hop_length)
     return bpm
-def run(info_tag=True, plot_tag=False, path=None,sr=22500, hop_length =512,json_interval=10, json_delete=False):
+def analyse(info_tag=True, plot_tag=False, path=None, sr=22050, hop_length =512, json_interval=10, json_delete=True):
     audios = get_audios(path)
     result_list = utils.load_json()
     for i, audio in enumerate(audios):
@@ -65,5 +65,13 @@ def run(info_tag=True, plot_tag=False, path=None,sr=22500, hop_length =512,json_
     if json_delete:
         utils.delete_json()
     return result_list
-result = run(path="H:\somemusiccode\sometrying\Armin")
-utils.save_json(result)
+
+audio = get_audios('moments.wav')[0]
+sr = 44100
+y = get_series(audio, sr=sr)
+harmonic, percussive = scale.decompose_audio(y)
+utils.write_audio('harmonic.wav', harmonic, sr)
+utils.write_audio('percussive.wav', percussive, sr)
+vocal, background = scale.separte_audio(y, sr)
+utils.write_audio('vocal.wav', vocal, sr)
+utils.write_audio('background.wav', background, sr)

@@ -25,7 +25,8 @@ def path_split(path):
 def load_audio(path, sr):
     y, sr = librosa.load(path=path, sr=sr)
     return y
-
+def write_audio(path, y, sr):
+    librosa.output.write_wav(path, y, sr)
 
 # JSON utils
 def load_json():
